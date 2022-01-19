@@ -1,9 +1,9 @@
 import cv2
 import os
 
-def selfie_to_ieee_biography(img_path, save_path=None, cascade_path=None):
+def selfie_to_ieee_biography(img_path, save=False, save_path=None, cascade_path=None):
     # Read the input image
-    img = cv2.imread(IMG_PATH, cv2.IMREAD_GRAYSCALE)
+    img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
 
     # Get face
     x, y, w, h = get_face(img, cascade_path=cascade_path)
@@ -15,7 +15,11 @@ def selfie_to_ieee_biography(img_path, save_path=None, cascade_path=None):
     img = crop_and_resize(img, xmin, ymin, xmax, ymax)
     
     # Save cropped image
-    if save_path:
+    if save:
+        if save_path is None:
+            basename = os.path.basename(img_path).split('.')[0]
+            dirname = os.path.dirname(img_path)
+            save_path = os.path.join(dirname, basename + '_IEEE.png')
         cv2.imwrite(save_path, img)
         
     return img
@@ -42,8 +46,8 @@ def expand_face_area(x, y, w, h):
 
     xmin = int(xmid - 0.75 * w)
     xmax = int(xmid + 0.75 * w)
-    ymin = int(ymid - 0.875 * h)
-    ymax = int(ymid + 1 * h)
+    ymin = int(ymid - 0.925 * h)
+    ymax = int(ymid + 0.950 * h)
     
     return xmin, ymin, xmax, ymax
 
